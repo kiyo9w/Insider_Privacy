@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tải ứng dụng | INSIDER</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* =====================================================
+           DOWNLOAD PAGE — TikTok-inspired layout
+           ===================================================== */
+
+        body { overflow-x: hidden; }
+
+        /* Wrapper doesn't use the shared content-wrapper here */
+        .dl-page { display: flex; flex-direction: column; min-height: 100vh; }
+        /* Widen the header to match hero layout so logo aligns with content */
+        .dl-page .header-content {
+            max-width: 1140px;
+            padding: 0 48px;
+        }
+
+        /* Header logo: theme-aware (dark-ho = light logo for dark bg, light-ho = dark logo for light bg) */
+        [data-theme="dark"] .dl-page .logo .light-logo { display: none !important; }
+        [data-theme="dark"] .dl-page .logo .dark-logo { display: block !important; }
+        [data-theme="light"] .dl-page .logo .light-logo { display: block !important; }
+        [data-theme="light"] .dl-page .logo .dark-logo { display: none !important; }
+
+        /* ─────────────────────────────────────────────────────
+           HERO
+           ───────────────────────────────────────────────────── */
+        .dl-hero {
+            position: relative;
+            min-height: calc(100vh - 56px);
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+        }
+
+        /* Background image — scale up so only device mockups (right portion)
+           are visible; the INSIDER watermark on the left is pushed off-screen */
+        .dl-hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('../assets/background.png');
+            background-size: auto 145%;
+            background-position: right center;
+            background-repeat: no-repeat;
+        }
+
+        /* Overlay: solid dark for the first 40%, then graceful fade.
+           Keeps our text crisp AND hides any residual edge of the bg watermark. */
+        .dl-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to right,
+                #04090F 0%,
+                #04090F 38%,
+                rgba(4, 9, 15, 0.94) 48%,
+                rgba(4, 9, 15, 0.60) 60%,
+                rgba(4, 9, 15, 0.18) 75%,
+                rgba(4, 9, 15, 0.03) 86%,
+                transparent 93%
+            );
+        }
+
+        /* Subtle bottom vignette */
+        .dl-hero-overlay::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 80px;
+            background: linear-gradient(to top, rgba(4,9,15,0.5), transparent);
+        }
+
+        /* Inner layout */
+        .dl-hero-inner {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            min-height: calc(100vh - 56px);
+        }
+
+        /* ─────────────────────────────────────────────────────
+           LEFT CONTENT
+           ───────────────────────────────────────────────────── */
+        .dl-left {
+            width: 48%;
+            max-width: 500px;
+            padding: 64px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: dlFadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
+        @keyframes dlFadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─────────────────────────────────────────────────────
+           PLATFORM TABS  (TikTok pill style)
+           ───────────────────────────────────────────────────── */
+        .dl-tabs {
+            display: flex;
+            gap: 0;
+            padding: 4px;
+            border-radius: 999px;
+            margin-bottom: 40px;
+            width: min(100%, 278px);
+            box-sizing: border-box;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .dl-tab {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.1px;
+            cursor: pointer;
+            flex: 1 1 0;
+            min-width: 0;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.70);
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .dl-tab:hover {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .dl-tab.active {
+            background: #E7E8EA;
+            color: #0A0A0A;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ─────────────────────────────────────────────────────
+           TAB CONTENT
+           ───────────────────────────────────────────────────── */
+        .dl-tab-content { opacity: 1; transition: opacity 0.25s ease; }
+        .dl-tab-content.hidden { display: none; }
+
+        @keyframes tabIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .dl-tab-content.entering { animation: tabIn 0.3s ease both; }
+
+        /* Eyebrow */
+        .dl-eyebrow {
+            font-size: 13.5px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.45);
+            letter-spacing: 0.1px;
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+
+        /* BIG headline — TikTok size */
+        .dl-headline {
+            font-size: clamp(38px, 4.8vw, 58px);
+            font-weight: 800;
+            line-height: 1.03;
+            letter-spacing: -2px;
+            color: #FFFFFF;
+            margin-bottom: 18px;
+        }
+
+        .dl-headline .accent { color: #20A4F3; }
+
+        /* ─────────────────────────────────────────────────────
+           BADGE GROUPS
+           ───────────────────────────────────────────────────── */
+        .dl-badges { display: flex; flex-direction: column; gap: 0; }
+
+        .dl-badge-group {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            padding: 20px 0;
+            border-bottom: 0.5px solid rgba(255,255,255,0.07);
+        }
+        .dl-badge-group:first-child { padding-top: 0; }
+        .dl-badge-group:last-child  { border-bottom: none; padding-bottom: 0; }
+
+        .dl-type-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.35px;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border-radius: 999px;
+            width: fit-content;
+            color: rgba(255, 255, 255, 0.78);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        .dl-badge-hint {
+            font-size: 11.5px;
+            color: rgba(255,255,255,0.42);
+            margin: 0;
+        }
+
+        .dl-beta-notice {
+            margin: 2px 0 2px;
+            font-size: 12.5px;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.82);
+            max-width: 430px;
+        }
+
+        /* ─────────────────────────────────────────────────────
+           STORE BUTTONS
+           ───────────────────────────────────────────────────── */
+        .dl-store-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 22px;
+            border-radius: 15px;
+            text-decoration: none;
+            width: fit-content;
+            max-width: 270px;
+            transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.18s ease,
+                        opacity 0.15s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .dl-store-btn:hover  { transform: scale(1.04); }
+        .dl-store-btn:active { transform: scale(0.97); opacity: 0.88; }
+
+        /* Official store artwork from Apple/Google — larger than beta button */
+        .official-store-badge {
+            display: block;
+            width: auto;
+            height: 56px;
+        }
+
+        /* App Store */
+        .dl-store-btn.app-store {
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+        }
+        .dl-store-btn.app-store:hover {
+            box-shadow: none;
+        }
+
+        /* TestFlight: vivid, non-purple */
+        .dl-store-btn.testflight {
+            background: linear-gradient(135deg, #00AFFF 0%, #20A4F3 55%, #0D7FD9 100%);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .dl-store-btn.testflight:hover {
+            box-shadow: 0 10px 30px rgba(32, 164, 243, 0.45);
+        }
+
+        /* Google Play */
+        .dl-store-btn.google-play {
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+        }
+        .dl-store-btn.google-play:hover {
+            box-shadow: none;
+        }
+
+        /* Google Play Beta: vivid, non-purple */
+        .dl-store-btn.google-play-beta {
+            background: linear-gradient(135deg, #00C853 0%, #1ED760 55%, #00A843 100%);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .dl-store-btn.google-play-beta:hover {
+            box-shadow: 0 10px 30px rgba(0, 200, 83, 0.4);
+        }
+
+        .btn-icon { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+        .btn-text { display: flex; flex-direction: column; gap: 1px; }
+
+        .btn-small {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.68);
+            line-height: 1;
+        }
+        .btn-big {
+            font-size: 17px;
+            font-weight: 700;
+            color: #FFFFFF;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+        }
+
+        /* ─────────────────────────────────────────────────────
+           SCROLL HINT
+           ───────────────────────────────────────────────────── */
+        .dl-scroll-hint {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            color: rgba(255,255,255,0.22);
+            animation: scrollBounce 2.4s ease-in-out infinite;
+            cursor: pointer;
+        }
+        @keyframes scrollBounce {
+            0%,100% { transform: translateX(-50%) translateY(0); }
+            50%      { transform: translateX(-50%) translateY(7px); }
+        }
+
+        /* ─────────────────────────────────────────────────────
+           BELOW-HERO SECTIONS
+           ───────────────────────────────────────────────────── */
+        .dl-below {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 var(--space-4) var(--space-16);
+        }
+
+        .dl-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 28px;
+        }
+
+        /* ─────────────────────────────────────────────────────
+           LIGHT MODE — keep hero dark regardless
+           ───────────────────────────────────────────────────── */
+        [data-theme="light"] .dl-hero-overlay {
+            background: linear-gradient(
+                to right,
+                #04090F 0%,
+                rgba(4, 9, 15, 0.97) 18%,
+                rgba(4, 9, 15, 0.90) 32%,
+                rgba(4, 9, 15, 0.65) 52%,
+                rgba(4, 9, 15, 0.20) 70%,
+                transparent 82%
+            );
+        }
+
+        /* ─────────────────────────────────────────────────────
+           RESPONSIVE
+           ───────────────────────────────────────────────────── */
+        @media (max-width: 960px) {
+            .dl-hero-inner { padding: 0 32px; }
+            .dl-page .header-content { padding: 0 32px; }
+            .dl-left { width: 60%; max-width: none; }
+        }
+
+        @media (max-width: 680px) {
+            .dl-hero { min-height: auto; }
+            .dl-hero-inner { padding: 0 22px; align-items: flex-start; }
+            /* On mobile the bg is further right so still works; extra safety overlay */
+            .dl-hero-overlay {
+                background: linear-gradient(
+                    to right,
+                    #04090F 0%,
+                    #04090F 55%,
+                    rgba(4, 9, 15, 0.85) 70%,
+                    rgba(4, 9, 15, 0.40) 85%,
+                    rgba(4, 9, 15, 0.10) 95%,
+                    transparent 100%
+                );
+            }
+            .dl-page .header-content { padding: 0 20px; }
+            .dl-left { width: 100%; padding: 48px 0 88px; }
+            .dl-tabs { width: min(100%, 248px); }
+            .dl-headline { font-size: 38px; letter-spacing: -1.4px; }
+            .dl-store-btn { max-width: 100%; width: 100%; }
+            .dl-beta-notice { font-size: 12px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container dl-page">
+
+        <!-- ══ App Bar ══════════════════════════════════════════ -->
+        <header class="app-bar">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../images/light-ho.png" alt="INSIDER Logo" class="logo-img light-logo">
+                    <img src="../images/dark-ho.png"  alt="INSIDER Logo" class="logo-img dark-logo">
+                </div>
+                <button id="theme-toggle" class="icon-button" aria-label="Chuyển giao diện">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/>
+                        <path d="M12 2v2"/><path d="M12 20v2"/>
+                        <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+                        <path d="M2 12h2"/><path d="M20 12h2"/>
+                        <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- ══ HERO ═════════════════════════════════════════════ -->
+        <section class="dl-hero">
+            <div class="dl-hero-bg"></div>
+            <div class="dl-hero-overlay"></div>
+
+            <div class="dl-hero-inner">
+                <div class="dl-left">
+
+                    <!-- Platform Tabs -->
+                    <div class="dl-tabs">
+
+                        <button class="dl-tab active" data-tab="ios" aria-pressed="true">
+                            <!-- Apple logo -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="17" viewBox="0 0 814 1000" fill="currentColor">
+                                <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 268.5-317.3 85.7 0 158 55.7 213 55.7 53 0 136.2-58.7 232.1-58.7zm-24.3-181.5c24.2-28.8 41.2-68.4 41.2-107.9 0-5.8-.6-11.6-1.6-17.3-38.8 1.3-86.4 26.5-114.6 59.1-21.2 23.9-41.2 64-41.2 104.9 0 6.4.6 12.8 1.9 18.5 3.2.6 6.4.9 9.7.9 34.5 0 78.9-23.9 104.6-58.2z"/>
+                            </svg>
+                            iOS
+                        </button>
+
+                        <button class="dl-tab" data-tab="android" aria-pressed="false">
+                            <!-- Android icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5S11 23.33 11 22.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zm-2.5-10C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84 1.3-1.3c.2-.2.2-.51 0-.71a.496.496 0 0 0-.71 0l-1.48 1.48A5.84 5.84 0 0 0 12 1c-.96 0-1.86.23-2.66.63L7.85.15a.5.5 0 0 0-.71.71l1.31 1.31C7.08 3.05 6 4.43 6 6h12c0-1.59-1.1-2.97-2.47-3.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/>
+                            </svg>
+                            Android
+                        </button>
+
+                    </div><!-- /dl-tabs -->
+
+                    <!-- ── iOS Content ─────────────────────────── -->
+                    <div class="dl-tab-content" id="tab-ios">
+
+                        <p class="dl-eyebrow">Tải về ứng dụng INSIDER chính thức cho iOS</p>
+
+                        <h1 class="dl-headline">
+                            Trợ lý ảo AI<br>
+                            <span class="accent">dành cho doanh nghiệp.</span>
+                        </h1>
+
+                        <div class="dl-badges">
+
+                            <!-- App Store -->
+                            <div class="dl-badge-group">
+                                <span class="dl-type-chip official">Chính thức</span>
+                                <a href="https://apps.apple.com/il/app/insider-ai/id6758019554" class="dl-store-btn app-store" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store">
+                                    <img src="../assets/Download-on-the-App-Store/VN/Download_on_App_Store/Black_lockup/SVG/Download_on_the_App_Store_Badge_VN_RGB_blk_100217.svg" alt="Download on the App Store" class="official-store-badge">
+                                </a>
+                            </div>
+
+                            <!-- TestFlight -->
+                            <div class="dl-badge-group">
+                                <span class="dl-type-chip beta">Thử nghiệm · Beta</span>
+                                <p class="dl-beta-notice">Phiên bản thử nghiệm (Beta) có thể chứa các tính năng mới chưa được phát hành rộng rãi và đôi khi có thể gặp một số lỗi nhỏ. Nếu bạn muốn trải nghiệm ổn định nhất, hãy sử dụng phiên bản Chính thức từ App Store hoặc Google Play.</p>
+                                <a href="https://testflight.apple.com/v1/app/6758019554?build=202103249" class="dl-store-btn testflight" target="_blank" rel="noopener noreferrer" aria-label="Join TestFlight Beta">
+                                    <div class="btn-icon">
+                                        <img src="../assets/200x200bb-75.webp" alt="TestFlight Icon" width="22" height="22" style="border-radius:6px; display:block;">
+                                    </div>
+                                    <div class="btn-text">
+                                        <span class="btn-small">Tải bản thử nghiệm qua</span>
+                                        <span class="btn-big">TestFlight</span>
+                                    </div>
+                                </a>
+                                <p class="dl-badge-hint">LƯU Ý: Người dùng cần cài TestFlight từ App Store trước khi tham gia</p>
+                            </div>
+
+                        </div><!-- /dl-badges -->
+                    </div><!-- /tab-ios -->
+
+                    <!-- ── Android Content ─────────────────────── -->
+                    <div class="dl-tab-content hidden" id="tab-android">
+
+                        <p class="dl-eyebrow">Tải về ứng dụng INSIDER chính thức cho Android</p>
+
+                        <h1 class="dl-headline">
+                            Tin tức AI<br>
+                            thông minh,<br>
+                            <span class="accent">dành cho bạn.</span>
+                        </h1>
+
+                        <div class="dl-badges">
+
+                            <!-- Google Play -->
+                            <div class="dl-badge-group">
+                                <span class="dl-type-chip official">Chính thức</span>
+                                <a href="https://play.google.com/store/apps/details?id=com.insider.horseai" class="dl-store-btn google-play" target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play">
+                                    <img src="../assets/Google Play Badge guidelines/Get it on Google Play Badges/Digital/svg/GetItOnGooglePlay_Badge_Web_color_Vietnamese.svg" alt="Get it on Google Play" class="official-store-badge">
+                                </a>
+                            </div>
+
+                            <!-- Google Play Beta -->
+                            <div class="dl-badge-group">
+                                <span class="dl-type-chip beta">Thử nghiệm · Beta</span>
+                                <p class="dl-beta-notice">Phiên bản thử nghiệm (Beta) có thể chứa các tính năng mới chưa được phát hành rộng rãi và đôi khi có thể gặp một số lỗi nhỏ. Nếu bạn muốn trải nghiệm ổn định nhất, hãy sử dụng phiên bản Chính thức từ App Store hoặc Google Play.</p>
+                                <a href="https://play.google.com/store/apps/details?id=com.insider.horseai&amp;listing=open-testing" class="dl-store-btn google-play-beta" target="_blank" rel="noopener noreferrer" aria-label="Join Google Play Beta">
+                                    <div class="btn-icon">
+                                        <img src="../assets/pngtree-google-play-download-icon-vector-png-image_9183313.png" alt="Google Play Download Icon" width="22" height="22" style="display:block;">
+                                    </div>
+                                    <div class="btn-text">
+                                        <span class="btn-small">Tham gia thử nghiệm qua</span>
+                                        <span class="btn-big">Google Play Beta</span>
+                                    </div>
+                                </a>
+                                <p class="dl-badge-hint">Nhấn tham gia chương trình Beta trên trang ứng dụng</p>
+                            </div>
+
+                        </div><!-- /dl-badges -->
+                    </div><!-- /tab-android -->
+
+                </div><!-- /dl-left -->
+
+                <!-- Right: intentionally empty — bg image shows through -->
+                <div style="flex:1;"></div>
+
+            </div><!-- /dl-hero-inner -->
+
+            <!-- Scroll indicator -->
+            <div class="dl-scroll-hint" role="presentation" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m6 9 6 6 6-6"/>
+                </svg>
+            </div>
+
+        </section><!-- /dl-hero -->
+
+        <!-- ══ Below-hero ════════════════════════════════════════ -->
+        <div class="dl-below">
+            <!-- Footer branding -->
+            <div class="dl-footer">
+                <img src="../images/light-ve.png" alt="INSIDER" class="logo-img-small light-logo">
+                <img src="../images/dark-ve.png"  alt="INSIDER" class="logo-img-small dark-logo">
+            </div>
+
+        </div><!-- /dl-below -->
+
+    </div><!-- /app-container -->
+
+    <script src="../script.js"></script>
+    <script>
+        // Platform tab switching
+        (function () {
+            const tabs    = document.querySelectorAll('.dl-tab');
+            const contents = document.querySelectorAll('.dl-tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+
+                    // Update tab active state
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-pressed', 'false');
+                    });
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-pressed', 'true');
+
+                    // Swap content with animation
+                    contents.forEach(c => c.classList.add('hidden'));
+
+                    const el = document.getElementById('tab-' + target);
+                    if (el) {
+                        el.classList.remove('hidden');
+                        el.classList.add('entering');
+                        el.addEventListener('animationend', () => el.classList.remove('entering'), { once: true });
+                    }
+                });
+            });
+
+            // Smooth scroll on chevron click
+            const hint = document.querySelector('.dl-scroll-hint');
+            if (hint) {
+                hint.addEventListener('click', () => {
+                    document.querySelector('.dl-below')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+        })();
+    </script>
+
+</body>
+</html>
