@@ -291,12 +291,12 @@
         .dl-store-btn {
             display: inline-flex;
             align-items: center;
-            gap: 13px;
-            padding: 13px 22px;
-            border-radius: 15px;
+            gap: 15px;
+            padding: 16px 28px;
+            border-radius: 18px;
             text-decoration: none;
             width: fit-content;
-            max-width: 270px;
+            max-width: 320px;
             transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
                         box-shadow 0.18s ease,
                         opacity 0.15s ease;
@@ -306,11 +306,11 @@
         .dl-store-btn:hover  { transform: scale(1.04); }
         .dl-store-btn:active { transform: scale(0.97); opacity: 0.88; }
 
-        /* Official store artwork from Apple/Google — larger than beta button */
+        /* Official store artwork from Apple/Google — smaller than beta button */
         .official-store-badge {
             display: block;
             width: auto;
-            height: 56px;
+            height: 42px;
         }
 
         /* App Store */
@@ -355,16 +355,16 @@
 
         .btn-icon { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 
-        .btn-text { display: flex; flex-direction: column; gap: 1px; }
+        .btn-text { display: flex; flex-direction: column; gap: 2px; }
 
         .btn-small {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 400;
             color: rgba(255,255,255,0.68);
             line-height: 1;
         }
         .btn-big {
-            font-size: 17px;
+            font-size: 20px;
             font-weight: 700;
             color: #FFFFFF;
             line-height: 1.2;
@@ -524,21 +524,13 @@
 
                         <div class="dl-badges">
 
-                            <!-- App Store -->
-                            <div class="dl-badge-group">
-                                <span class="dl-type-chip official">Chính thức</span>
-                                <a href="https://apps.apple.com/il/app/insider-ai/id6758019554" class="dl-store-btn app-store" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store">
-                                    <img src="../assets/Download-on-the-App-Store/VN/Download_on_App_Store/Black_lockup/SVG/Download_on_the_App_Store_Badge_VN_RGB_blk_100217.svg" alt="Download on the App Store" class="official-store-badge">
-                                </a>
-                            </div>
-
                             <!-- TestFlight -->
                             <div class="dl-badge-group">
                                 <span class="dl-type-chip beta">Thử nghiệm · Beta</span>
                                 <p class="dl-beta-notice">Phiên bản thử nghiệm (Beta) có thể chứa các tính năng mới chưa được phát hành rộng rãi và đôi khi có thể gặp một số lỗi nhỏ. Để trải nghiệm ổn định nhất, hãy sử dụng phiên bản Chính thức từ App Store hoặc Google Play.</p>
                                 <a href="https://testflight.apple.com/v1/app/6758019554?build=202103249" class="dl-store-btn testflight" target="_blank" rel="noopener noreferrer" aria-label="Join TestFlight Beta">
                                     <div class="btn-icon">
-                                        <img src="../assets/200x200bb-75.webp" alt="TestFlight Icon" width="22" height="22" style="border-radius:6px; display:block;">
+                                        <img src="../assets/200x200bb-75.webp" alt="TestFlight Icon" width="28" height="28" style="border-radius:8px; display:block;">
                                     </div>
                                     <div class="btn-text">
                                         <span class="btn-small">Tải bản thử nghiệm qua</span>
@@ -546,6 +538,14 @@
                                     </div>
                                 </a>
                                 <p class="dl-badge-hint">LƯU Ý: Người dùng cần cài TestFlight từ App Store trước khi tham gia</p>
+                            </div>
+
+                            <!-- App Store -->
+                            <div class="dl-badge-group">
+                                <span class="dl-type-chip official">Chính thức</span>
+                                <a href="https://apps.apple.com/il/app/insider-ai/id6758019554" class="dl-store-btn app-store" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store">
+                                    <img src="../assets/Download-on-the-App-Store/VN/Download_on_App_Store/Black_lockup/SVG/Download_on_the_App_Store_Badge_VN_RGB_blk_100217.svg" alt="Download on the App Store" class="official-store-badge">
+                                </a>
                             </div>
 
                         </div><!-- /dl-badges -->
@@ -565,21 +565,13 @@
 
                         <div class="dl-badges">
 
-                            <!-- Google Play -->
-                            <div class="dl-badge-group">
-                                <span class="dl-type-chip official">Chính thức</span>
-                                <a href="https://play.google.com/store/apps/details?id=com.insider.horseai" class="dl-store-btn google-play" target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play">
-                                    <img src="../assets/Google Play Badge guidelines/Get it on Google Play Badges/Digital/svg/GetItOnGooglePlay_Badge_Web_color_Vietnamese.svg" alt="Get it on Google Play" class="official-store-badge">
-                                </a>
-                            </div>
-
                             <!-- Google Play Beta -->
                             <div class="dl-badge-group">
                                 <span class="dl-type-chip beta">Thử nghiệm · Beta</span>
                                 <p class="dl-beta-notice">Phiên bản thử nghiệm (Beta) có thể chứa các tính năng mới chưa được phát hành rộng rãi và đôi khi có thể gặp một số lỗi nhỏ. Để trải nghiệm ổn định nhất, hãy sử dụng phiên bản Chính thức từ App Store hoặc Google Play.</p>
                                 <a href="https://play.google.com/store/apps/details?id=com.insider.horseai&amp;listing=open-testing" class="dl-store-btn google-play-beta" target="_blank" rel="noopener noreferrer" aria-label="Join Google Play Beta">
                                     <div class="btn-icon">
-                                        <img src="../assets/pngtree-google-play-download-icon-vector-png-image_9183313.png" alt="Google Play Download Icon" width="22" height="22" style="display:block;">
+                                        <img src="../assets/pngtree-google-play-download-icon-vector-png-image_9183313.png" alt="Google Play Download Icon" width="28" height="28" style="display:block;">
                                     </div>
                                     <div class="btn-text">
                                         <span class="btn-small">Tham gia thử nghiệm qua</span>
@@ -587,6 +579,14 @@
                                     </div>
                                 </a>
                                 <p class="dl-badge-hint">Nhấn tham gia chương trình Beta trên trang ứng dụng</p>
+                            </div>
+
+                            <!-- Google Play -->
+                            <div class="dl-badge-group">
+                                <span class="dl-type-chip official">Chính thức</span>
+                                <a href="https://play.google.com/store/apps/details?id=com.insider.horseai" class="dl-store-btn google-play" target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play">
+                                    <img src="../assets/Google Play Badge guidelines/Get it on Google Play Badges/Digital/svg/GetItOnGooglePlay_Badge_Web_color_Vietnamese.svg" alt="Get it on Google Play" class="official-store-badge">
+                                </a>
                             </div>
 
                         </div><!-- /dl-badges -->
